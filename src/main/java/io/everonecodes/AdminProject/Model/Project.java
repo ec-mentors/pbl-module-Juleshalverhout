@@ -36,5 +36,5 @@ public class Project {
 
     @ManyToMany(mappedBy = "assignedProjects", fetch = FetchType.LAZY)
 
-    private Set<Employee> assignedEmployees = new HashSet<>();
+    private Set<Employee> assignedEmployees;
 }

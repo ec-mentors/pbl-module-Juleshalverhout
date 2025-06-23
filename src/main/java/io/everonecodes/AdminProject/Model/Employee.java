@@ -34,5 +34,5 @@ public class Employee {
             joinColumns = @JoinColumn(name = "employeeId"),
             inverseJoinColumns = @JoinColumn(name = "projectId")
     )
-    private Set<Project> assignedProjects = new HashSet<>();
+    private Set<Project> assignedProjects;
 }
