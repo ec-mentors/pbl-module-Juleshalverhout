@@ -1,4 +1,4 @@
-package io.everonecodes.AdminProject;
+package io.everonecodes.adminproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

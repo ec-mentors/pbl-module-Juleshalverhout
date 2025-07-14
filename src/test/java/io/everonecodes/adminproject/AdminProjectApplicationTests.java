@@ -1,4 +1,4 @@
-package io.everonecodes.AdminProject;
+package io.everonecodes.adminproject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

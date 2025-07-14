@@ -1,12 +1,10 @@
-package io.everonecodes.AdminProject.Model;
+package io.everonecodes.adminproject.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -35,4 +33,8 @@ public class Employee {
             inverseJoinColumns = @JoinColumn(name = "projectId")
     )
     private Set<Project> assignedProjects;
+
+//    public Set<Project> getAssignedProjects() {
+//        return this.assignedProjects;
+//    }
 }

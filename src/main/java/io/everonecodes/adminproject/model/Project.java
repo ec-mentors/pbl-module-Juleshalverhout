@@ -1,5 +1,6 @@
-package io.everonecodes.AdminProject.Model;
+package io.everonecodes.adminproject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -36,5 +36,6 @@ public class Project {
 
     @ManyToMany(mappedBy = "assignedProjects", fetch = FetchType.LAZY)
 
+    @JsonIgnore
     private Set<Employee> assignedEmployees;
 }
