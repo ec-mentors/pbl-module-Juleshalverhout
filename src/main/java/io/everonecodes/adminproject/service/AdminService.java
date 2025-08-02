@@ -8,8 +8,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class AdminService {
@@ -38,6 +40,7 @@ public class AdminService {
         return projectRepository.save(project);
     }
 
+    // Assign a project to an employee
     @Transactional
     public Employee assignProjectToEmployee(Long employeeId, Long projectId) {
 
@@ -74,6 +77,80 @@ public class AdminService {
         // into our join table ('employee_project_assignments') to link this employee and project.
         // The method then returns the saved employee, which now reflects the new relationship.
         return employeeRepository.save(employee);
+    }
+
+    //Get individual employee by ID
+    public Employee getEmployeeById(Long employeeId) {
+
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+
+        if (optionalEmployee.isEmpty()) {
+            throw new EntityNotFoundException("Employee not found with id: " + employeeId);
+        }
+        return optionalEmployee.get();
+    }
+
+    //Get individual project by ID
+    public Project getProjectById(Long projectId) {
+
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+
+        if (optionalProject.isEmpty()) {
+            throw new EntityNotFoundException("Project not found with id: " + projectId);
+        }
+        return optionalProject.get();
+    }
+
+    //Delete individual project by ID
+    @Transactional
+    public void deleteProjectById(Long projectId) {
+        Optional<Project> projectToDelete = projectRepository.findById(projectId);
+
+        if (projectToDelete.isEmpty()) {
+            throw new EntityNotFoundException("Project not found with id: " + projectId);
+        } else {
+
+            for (Employee employee : projectToDelete.get().getAssignedEmployees()) {
+                employee.getAssignedProjects().remove(projectToDelete);
+            }
+            projectRepository.delete(projectToDelete.get());
+        }
+    }
+
+    //Update individual project by ID
+    @Transactional
+    public Project updateProjectById(Long projectId, Project updatedProjectDetails) {
+        Project existingProject = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Project not found with ID: " + projectId));
+
+        existingProject.setProjectName(updatedProjectDetails.getProjectName());
+        existingProject.setDescription(updatedProjectDetails.getDescription());
+        existingProject.setLocation(updatedProjectDetails.getLocation());
+        existingProject.setAssigned(updatedProjectDetails.isAssigned());
+
+        return projectRepository.save(existingProject);
+    }
+
+    @Transactional
+    public void unassignEmployeeFromProject(Long employeeId, Long projectId) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new EntityNotFoundException("Employee not found")); // might replace with isEmpty check
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new EntityNotFoundException("Project not found"));
+
+        employee.getAssignedProjects().remove(project);
+    }
+
+    @Transactional
+    public void deleteEmployeeById(Long employeeId) {
+        Employee employeeToDelete = employeeRepository.findById(employeeId).orElseThrow(() -> new EntityNotFoundException("Cannot delete: Employee not found with id: " + employeeId));
+
+        Set<Project> projectsToUnassign = employeeToDelete.getAssignedProjects();
+
+        for (Project project : new HashSet<>(projectsToUnassign)) {
+
+            project.getAssignedEmployees().remove(employeeToDelete);
+        }
+        employeeToDelete.getAssignedProjects().clear();
+        employeeRepository.delete(employeeToDelete);
     }
 }
 

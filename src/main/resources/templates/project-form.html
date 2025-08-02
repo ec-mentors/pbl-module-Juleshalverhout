@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Project Management</title>
+
+    <!-- This line correctly loads the pico.min.css file. -->
+    <link rel="stylesheet" th:href="@{/css/pico.blue.min.css}">
+</head>
+<body>
+
+<div th:replace="~{layout :: header}"></div>
+
+<main th:fragment="content">
+    <!-- 'th:text' displays the pageTitle variable we set in the controller -->
+    <h2 th:text="${pageTitle}"></h2>
+
+    <!-- 'th:object' binds this form to the 'project' object from the model -->
+    <form th:action="@{/projects/save}" th:object="${project}" method="post">
+        <!-- This hidden input holds the ID. For new projects, it's null. For edits, it has a value. -->
+        <input type="hidden" th:field="*{projectId}" />
+
+        <div>
+            <label>Project Name:</label>
+            <!-- 'th:field' connects this input to the 'projectName' field of the 'project' object -->
+            <label>
+                <input type="text" th:field="*{projectName}" required />
+            </label>
+        </div>
+        <div>
+            <label>Description:</label>
+            <label>
+                <textarea th:field="*{description}" rows="4"></textarea>
+            </label>
+        </div>
+        <div>
+            <label>Location:</label>
+            <label>
+                <input type="text" th:field="*{location}" />
+            </label>
+        </div>
+        <div>
+            <label>Is Finished?</label>
+            <!-- Checkbox for the boolean field -->
+            <label>
+                <input type="checkbox" th:field="*{finished}" />
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Project</button>
+        <a th:href="@{/projects}" class="btn btn-secondary">Cancel</a>
+    </form>
+</main>
+
+</body>
+</html>

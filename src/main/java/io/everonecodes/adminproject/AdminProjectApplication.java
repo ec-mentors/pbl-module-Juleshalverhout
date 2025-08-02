@@ -10,4 +10,5 @@ public class AdminProjectApplication {
 		SpringApplication.run(AdminProjectApplication.class, args);
 	}
 
+
 }

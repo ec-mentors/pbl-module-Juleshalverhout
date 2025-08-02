@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Project Management</title>
+
+    <!-- This line correctly loads the pico.min.css file. -->
+    <link rel="stylesheet" th:href="@{/css/pico.blue.min.css}">
+</head>
+
+<body>
+
+<!-- This line includes the header and navigation from your layout file. -->
+<!-- It ensures the look and feel is consistent across all pages. -->
+<div th:replace="~{layout :: header}"></div>
+
+<!-- This 'th:fragment' tells the layout file where to insert this main content. -->
+<main th:fragment="content">
+    <h2>Current Unfinished Projects</h2>
+
+    <!-- This link allows users to create a new project from the home page. -->
+    <a th:href="@{/projects/new}" class="btn btn-primary">Create New Project</a>
+    <br/><br/>
+
+    <!-- ==================================================================== -->
+    <!-- START of Copied Section from projects.html -->
+    <!-- ==================================================================== -->
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Project Name</th>
+            <th>Location</th>
+            <th>Finished</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- This 'th:each' loops through the 'projects' list passed from the controller -->
+        <!-- For the index page, the controller passes only unfinished projects. -->
+        <!-- For the projects page, the controller passes all projects. -->
+        <!-- The HTML code doesn't care; it just loops through whatever list it receives. -->
+        <tr th:each="project : ${projects}">
+            <!-- 'th:text' safely displays the data from each 'project' object in the loop -->
+            <td th:text="${project.projectId}"></td>
+            <td th:text="${project.projectName}"></td>
+            <td th:text="${project.location}"></td>
+            <!-- This is a ternary operator in Thymeleaf: if project.isFinished is true, display 'Yes', otherwise 'No'. -->
+            <td th:text="${project.isFinished ? 'Yes' : 'No'}"></td>
+            <td>
+                <!-- 'th:href' creates a dynamic link to the edit page for this specific project's ID -->
+                <a th:href="@{/projects/edit/{id}(id=${project.projectId})}" class="btn btn-secondary">Edit</a>
+
+                <!-- The delete button is a small form to ensure it sends a POST request, which is safer for delete operations. -->
+                <form th:action="@{/projects/delete/{id}(id=${project.projectId})}" method="post" style="display:inline;">
+                    <!-- The onclick provides a javascript confirmation pop-up before deleting. -->
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- ==================================================================== -->
+    <!-- END of Copied Section from projects.html -->
+    <!-- ==================================================================== -->
+
+</main>
+
+</body>
+</html>

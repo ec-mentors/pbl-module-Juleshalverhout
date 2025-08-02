@@ -34,6 +34,9 @@ public class Project {
     @Column(nullable = false)
     private LocalDateTime creationDate = LocalDateTime.now();
 
+    @Column(nullable = false)
+    private boolean isFinished = false;
+
     @ManyToMany(mappedBy = "assignedProjects", fetch = FetchType.LAZY)
 
     @JsonIgnore
