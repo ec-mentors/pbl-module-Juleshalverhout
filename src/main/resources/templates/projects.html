@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Project Management</title>
+
+    <!-- This line correctly loads the pico.min.css file. -->
+    <link rel="stylesheet" th:href="@{/css/pico.blue.min.css}">
+</head>
+<body>
+
+<!-- This 'th:replace' includes our entire layout.html file -->
+<div th:replace="~{layout :: header}"></div>
+
+<main th:fragment="content">
+    <h2>All Projects</h2>
+    <a th:href="@{/projects/new}" class="btn btn-primary">Create New Project</a>
+    <br/><br/>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Project Name</th>
+            <th>Location</th>
+            <th>Finished</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 'th:each' loops through the 'projects' list passed from the controller -->
+        <tr th:each="project : ${projects}">
+            <!-- 'th:text' safely displays the data -->
+            <td th:text="${project.projectId}"></td>
+            <td th:text="${project.projectName}"></td>
+            <td th:text="${project.location}"></td>
+            <td th:text="${project.isFinished ? 'Yes' : 'No'}"></td>
+
+            <!-- This is the single, correct cell for all action buttons -->
+            <td>
+                <!-- Edit button -->
+                <a th:href="@{/projects/edit/{id}(id=${project.projectId})}" class="btn btn-secondary">Edit</a>
+
+                <!-- Details button -->
+                <a th:href="@{/projects/details/{id}(id=${project.projectId})}" class="btn btn-primary">Details</a>
+
+                <!-- Delete button form -->
+                <form th:action="@{/projects/delete/{id}(id=${project.projectId})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

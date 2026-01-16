@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Project Management</title>
+
+  <!-- This line correctly loads the pico.min.css file. -->
+  <link rel="stylesheet" th:href="@{/css/pico.blue.min.css}">
+</head>
+<body>
+
+<div th:replace="~{layout :: header}"></div>
+
+<main th:fragment="content">
+  <h2 th:text="${pageTitle}"></h2>
+
+  <!-- This form is bound to the 'employee' object from the model -->
+  <form th:action="@{/employees/save}" th:object="${employee}" method="post">
+    <!-- Hidden input to hold the ID during edits -->
+    <input type="hidden" th:field="*{employeeId}" />
+
+    <div>
+      <label>First Name:</label>
+      <label>
+        <input type="text" th:field="*{firstName}" required />
+      </label>
+    </div>
+    <div>
+      <label>Last Name:</label>
+      <label>
+        <input type="text" th:field="*{lastName}" required />
+      </label>
+    </div>
+    <div>
+      <label>Function:</label>
+      <label>
+        <input type="text" th:field="*{employeeFunction}" />
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Employee</button>
+    <a th:href="@{/employees}" class="btn btn-secondary">Cancel</a>
+  </form>
+</main>
+
+</body>
+</html>

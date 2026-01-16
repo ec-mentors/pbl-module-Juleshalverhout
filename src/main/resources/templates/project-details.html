@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Project Management</title>
+
+    <!-- This line correctly loads the pico.min.css file. -->
+    <link rel="stylesheet" th:href="@{/css/pico.blue.min.css}">
+</head>
+<body>
+
+<div th:replace="~{layout :: header}"></div>
+
+<main th:fragment="content">
+    <!-- Display the project's name using the 'project' object from the model -->
+    <h2 th:text="'Details for Project: ' + ${project.projectName}"></h2>
+
+    <!-- Section to show currently assigned employees -->
+    <h3>Assigned Employees</h3>
+    <!-- Check if the set of employees is empty -->
+    <div th:if="${project.assignedEmployees.isEmpty()}">
+        <p>No employees are currently assigned to this project.</p>
+    </div>
+    <!-- If not empty, display them in a list -->
+    <ul th:unless="${project.assignedEmployees.isEmpty()}">
+        <!-- Loop through each employee in the project's 'assignedEmployees' set -->
+        <li th:each="employee : ${project.assignedEmployees}">
+            <!-- Display the employee's name -->
+            <span th:text="${employee.firstName} + ' ' + ${employee.lastName}"></span>
+            <!-- A small form with a button to unassign this specific employee -->
+            <form th:action="@{/projects/{pid}/unassignEmployee/{eid}(pid=${project.projectId}, eid=${employee.employeeId})}" method="post" style="display:inline; margin-left: 20px;">
+                <button type="submit" class="btn btn-danger btn-sm">Unassign</button>
+            </form>
+        </li>
+    </ul>
+
+    <hr/>
+
+    <!-- Section to assign a new employee -->
+    <h3>Assign a New Employee</h3>
+    <form th:action="@{/projects/{projectId}/assignEmployee(projectId=${project.projectId})}" method="post">
+        <label>
+            <select name="employeeId" required>
+                <option value="">-- Select an Employee --</option>
+                <!-- Loop through the 'allEmployees' list passed from the controller -->
+                <tr th:each="employee : ${allEmployees}">
+                    <!-- Create an option for each employee -->
+                    <option th:value="${employee.employeeId}" th:text="${employee.firstName} + ' ' + ${employee.lastName}"></option>
+                </tr>
+            </select>
+        </label>
+        <button type="submit" class="btn btn-primary">Assign Employee</button>
+    </form>
+
+    <br/>
+    <a th:href="@{/projects}" class="btn btn-secondary">Back to All Projects</a>
+
+</main>
+
+</body>
+</html>

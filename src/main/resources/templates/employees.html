@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Project Management</title>
+
+    <!-- This line correctly loads the pico.min.css file. -->
+    <link rel="stylesheet" th:href="@{/css/pico.blue.min.css}">
+</head>
+<body>
+
+<div th:replace="~{layout :: header}"></div>
+
+<main th:fragment="content">
+    <h2>All Employees</h2>
+    <a th:href="@{/employees/new}" class="btn btn-primary">Create New Employee</a>
+    <br/><br/>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Function</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop through the list of employees passed from the controller -->
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.employeeId}"></td>
+            <td th:text="${employee.firstName}"></td>
+            <td th:text="${employee.lastName}"></td>
+            <td th:text="${employee.employeeFunction}"></td>
+            <td>
+                <!-- Link to the edit page for this specific employee -->
+                <a th:href="@{/employees/edit/{id}(id=${employee.employeeId})}" class="btn btn-secondary">Edit</a>
+
+                <!-- Delete button form -->
+                <form th:action="@{/employees/delete/{id}(id=${employee.employeeId})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this employee?');">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Project Management</title>
+
+    <!-- This line correctly loads the pico.min.css file. -->
+    <link rel="stylesheet" th:href="@{/css/pico.blue.min.css}">
+</head>
+<body>
+
+<!-- This is the one and only header fragment for your entire application. -->
+<!-- All other pages will include this exact block of HTML. -->
+<header th:fragment="header">
+    <h1>Project & Employee Admin</h1>
+    <nav>
+        <a th:href="@{/}">Home (Unfinished Projects)</a>
+        <a th:href="@{/projects}">All Projects</a>
+        <a th:href="@{/employees}">All Employees</a>
+    </nav>
+</header>
+
+<!-- The main content area, correctly wrapped in a <main> tag with the 'container' class. -->
+<main class="container">
+    <!-- This div will be replaced by the specific content of each page (e.g., projects.html, index.html). -->
+    <div th:replace="${content}"></div>
+</main>
+
+</body>
+</html>
